@@ -1,5 +1,12 @@
 """Revision Task - Sandwich Maker
-by Ethan Wong"""
+by Ethan Wong
+
+Known bugs:
+- selecting no bread first, and then later adding a bread, will cause the program to crash
+- when you have edited your order, it will start a new instance of the function or something and
+  so you will repeatedly have to enter 'done' for the program to finish."""
+
+
 
 MY_MENU = {
     "bread": {
@@ -56,13 +63,18 @@ def print_order(order):
     print()
 
 
-def edit_order(order, menu):
+def prompt_edit():
+    print("Edit Order:\n"
+          " Enter the name of the item you would like to remove\n"
+          " Enter 'bread' if you would like to change the bread type\n"
+          " Enter 'meat' or 'garnish' if you would like to add more\n"
+          " Enter 'Done' if you are happy with your order")
+
+
+def edit_order(order, menu, prompt_needed=True):
     while True:
-        print("Edit Order:\n"
-              " Enter the name of the item you would like to remove\n"
-              " Enter 'bread' if you would like to change the bread type\n"
-              " Enter 'meat' or 'garnish' if you would like to add more\n"
-              " Enter 'Done' if you are happy with your order")
+        if prompt_needed:
+            prompt_edit()
         user = input(" > ").lower()
         print()
 
@@ -74,10 +86,8 @@ def edit_order(order, menu):
             order.pop(item_names.index(user))
             print(f"You have removed {user.title()} from your order.")
         elif user == "bread":
-            if order:
-                order[0] = select_ingredient(menu, "bread", 1)
-            else:
-                order += (select_ingredient(menu, "bread", 1))
+            del order[0]
+            order = select_ingredient(menu, "bread", 1) + order
             print(f"You have selected {order[0][0]} bread.")
         elif user in ("meat", "garnish"):
             order += (select_ingredient(menu, user))
@@ -85,8 +95,11 @@ def edit_order(order, menu):
         elif user in ("done", "complete", "finish", "end"):
             print_order(order)
             return order
+        elif user == "?":
+            edit_order(order, menu, True)
         else:
-            print("Please enter a valid option")
+            print("Please enter a valid option (?)")
+            edit_order(order, menu, False)
 
         print()
         print_order(order)
