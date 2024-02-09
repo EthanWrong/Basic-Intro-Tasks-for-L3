@@ -2,9 +2,7 @@
 by Ethan Wong
 
 Known bugs:
-- selecting no bread first, and then later adding a bread, will cause the program to crash
-- when you have edited your order, it will start a new instance of the function or something and
-  so you will repeatedly have to enter 'done' for the program to finish."""
+- selecting no bread first, and then later adding a bread, will cause the program to crash"""
 
 
 
@@ -78,6 +76,8 @@ def edit_order(order, menu, prompt_needed=True):
         user = input(" > ").lower()
         print()
 
+        prompt_needed = False
+
         item_names = []
         for item in order:
             item_names.append(item[0].lower())
@@ -89,17 +89,19 @@ def edit_order(order, menu, prompt_needed=True):
             del order[0]
             order = select_ingredient(menu, "bread", 1) + order
             print(f"You have selected {order[0][0]} bread.")
+            prompt_needed = True
         elif user in ("meat", "garnish"):
             order += (select_ingredient(menu, user))
             print(f"You have added {user.title()} to your order")
+            prompt_needed = True
         elif user in ("done", "complete", "finish", "end"):
             print_order(order)
             return order
         elif user == "?":
-            edit_order(order, menu, True)
+            prompt_needed = True
         else:
             print("Please enter a valid option (?)")
-            edit_order(order, menu, False)
+            prompt_needed = True
 
         print()
         print_order(order)
