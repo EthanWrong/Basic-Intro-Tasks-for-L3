@@ -1,8 +1,5 @@
 """Revision Task - Sandwich Maker
-by Ethan Wong
-
-Known bugs:
-- selecting no bread first, and then later adding a bread, will cause the program to crash"""
+by Ethan Wong"""
 
 MY_MENU = {
     "bread": {
