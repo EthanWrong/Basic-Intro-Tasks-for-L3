@@ -4,8 +4,6 @@ by Ethan Wong
 Known bugs:
 - selecting no bread first, and then later adding a bread, will cause the program to crash"""
 
-
-
 MY_MENU = {
     "bread": {
         "Wholemeal": 1.00,
@@ -34,7 +32,7 @@ def print_options(options):
     print("Enter 'X' to move on")
 
 
-def select_ingredient(menu, ingredient, limit=100):
+def select_ingredient(menu, ingredient, limit=100, compulsory=False):
     selection = []
     print(f"{ingredient.title()} - Limit: {limit}")
     print_options(menu[ingredient])
@@ -43,7 +41,10 @@ def select_ingredient(menu, ingredient, limit=100):
         if user in menu[ingredient].keys():
             selection.append([user, menu[ingredient][user]])
         elif user == "X":
-            return selection
+            if compulsory:
+                print(f"Must select a {ingredient}")
+            else:
+                return selection
         else:
             print("Please enter a valid option")
 
@@ -106,12 +107,13 @@ def edit_order(order, menu, prompt_needed=True):
         print()
         print_order(order)
 
+
 # main routine
 
 
 print("Welcome to Sandwhich Maker, where all your sandwich dreams come true.")
 print()
-my_bread = select_ingredient(MY_MENU, "bread", 1)
+my_bread = select_ingredient(MY_MENU, "bread", 1, True)
 print()
 my_meat = select_ingredient(MY_MENU, "meat")
 print()
